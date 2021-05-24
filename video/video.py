@@ -11,14 +11,53 @@ import torch.nn.functional as F
 from model import FaceRecognizer
 from PIL import Image, ImageDraw, ImageFont
 from backbone.mobilefacenet import MobileFaceNet
+from backbone.resnet import ResNet_50, ResNet_101, ResNet_152
+from backbone.irse import IR_50, IR_SE_50, IR_101, IR_SE_101, IR_152, IR_SE_152
 from mtcnn.utils.align_trans import get_reference_facial_points, warp_and_crop_face
+from backbone.vgg import VGG11, VGG11_BN, VGG13, VGG13_BN, VGG16, VGG16_BN, VGG19, VGG19_BN
 
 
 def load_model(model_dir, model_name, classnum=153, prefix='FRS', best_epoch=None, device='cpu'):
     backbone_name, margin_name = model_name.split('-')
     backbone = None
-    if backbone_name.upper() == 'MOBILEFACENET':
-        backbone = MobileFaceNet(512)
+    if backbone_name.upper() == 'RESNET_50':
+        backbone = ResNet_50([112, 112])
+    elif backbone_name.upper() == 'RESNET101':
+        backbone = ResNet_101([112, 112])
+    elif backbone_name.upper() == 'RESNET152':
+        backbone = ResNet_152([112, 112])
+    elif backbone_name.upper() == 'IR_50':
+        backbone = IR_50([112, 112])
+    elif backbone_name.upper() == 'IR_SE_50':
+        backbone = IR_SE_50([112, 112])
+    elif backbone_name.upper() == 'IR_101':
+        backbone = IR_101([112, 112])
+    elif backbone_name.upper() == 'IR_SE_101':
+        backbone = IR_SE_101([112, 112])
+    elif backbone_name.upper() == 'IR_152':
+        backbone = IR_152([112, 112])
+    elif backbone_name.upper() == 'IR_SE_152':
+        backbone = IR_SE_152([112, 112])
+    elif backbone_name.upper() == 'VGG11':
+        backbone = VGG11()
+    elif backbone_name.upper() == 'VGG11_BN':
+        backbone = VGG11_BN()
+    elif backbone_name.upper() == 'VGG13':
+        backbone = VGG13()
+    elif backbone_name.upper() == 'VGG13_BN':
+        backbone = VGG13_BN()
+    elif backbone_name.upper() == 'VGG16':
+        backbone = VGG16()
+    elif backbone_name.upper() == 'VGG16_BN':
+        backbone = VGG16_BN()
+    elif backbone_name.upper() == 'VGG19':
+        backbone = VGG19()
+    elif backbone_name.upper() == 'VGG19_BN':
+        backbone = VGG19_BN()
+    elif backbone_name.upper() == 'MOBILEFACENET':
+        backbone = MobileFaceNet(feature_dim=512)
+    else:
+        raise NameError(backbone_name, ' is not availabe!')
 
     assert backbone is not None, 'The backbone cannot find'
 
@@ -143,7 +182,7 @@ def main(args):
 def parse_args(argv):
     parser = argparse.ArgumentParser(description='Video Testing')
     parser.add_argument('--model_path', type=str, required=True, help='The path to storing models')
-    parser.add_argument('--model_name', type=str, required=True, help='The model name')
+    parser.add_argument('--backbone_name', type=str, required=True, help='The model name of recognizer (i.e., IR_SE_50-ArcFace)')
     parser.add_argument('--best_epoch', type=int, default=None, help='The epoch of trained models')
     parser.add_argument('--img_size', type=int, default=112, help='The size of cropped images')
     parser.add_argument('--name_list', type=str, default=r'E:\Dataset\Human_Face_Dataset\facebank-112x112.list')
