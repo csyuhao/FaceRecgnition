@@ -182,7 +182,7 @@ def main(args):
 def parse_args(argv):
     parser = argparse.ArgumentParser(description='Video Testing')
     parser.add_argument('--model_path', type=str, required=True, help='The path to storing models')
-    parser.add_argument('--backbone_name', type=str, required=True, help='The model name of recognizer (i.e., IR_SE_50-ArcFace)')
+    parser.add_argument('--model_name', type=str, required=True, help='The model name of recognizer (i.e., IR_SE_50-ArcFace)')
     parser.add_argument('--best_epoch', type=int, default=None, help='The epoch of trained models')
     parser.add_argument('--img_size', type=int, default=112, help='The size of cropped images')
     parser.add_argument('--name_list', type=str, default=r'E:\Dataset\Human_Face_Dataset\facebank-112x112.list')
